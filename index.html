@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="zh">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>TweenMax弹性按钮</title>
+	<link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+	<div class='content'>
+		<div class='menu'>
+			<div class='menu-wrapper'>
+				<ul class='menu-items'>
+					<li class='menu-item'>
+						<button class='menu-item-button'>
+							<i class='iconfont icon-shouye'></i>
+						</button>
+						<div class='menu-item-bounce'></div>
+					</li>
+					<li class='menu-item'>
+						<button class='menu-item-button'>
+							<i class='iconfont icon-bianji'></i>
+						</button>
+						<div class='menu-item-bounce'></div>
+					</li>
+					<li class='menu-item'>
+						<button class='menu-item-button'>
+							<i class='iconfont icon-baocun'></i>
+						</button>
+						<div class='menu-item-bounce'></div>
+					</li>
+				</ul>
+				<button class='menu-toggle-button'>
+					<i class='iconfont icon-addgrey menu-toggle-icon'></i>
+				</button>
+			</div>
+		</div>
+	</div>
+
+
+
+	<script src="js/jquery-1.11.0.min.js"></script>
+	<script src='js/TweenMax.min.js'></script>
+	<script type="text/javascript">
+		var isOpen = false //true 打开 false 关闭
+		var distance = 150
+		$('.menu-item').each(function (index, ele) {
+			TweenMax.to($(this), 1, {
+				rotation: 45 * index,
+				force3D: true,
+				ease: Quint.easeInOut
+			})
+		})
+		$(document).ready(function () {
+			$('.menu-toggle-button').on('touchstart', startHandler)
+			$('.menu-toggle-button').on('touchend', endHandler)
+			function startHandler() {
+				isOpen = !isOpen
+				TweenMax.to($(this).children('.menu-toggle-icon'), 0.2, {
+					rotation: isOpen ? 45 : 0,
+					ease: Quint.easeInOut,
+					force3D: true
+				})
+				isOpen ? openItem() : closeItem()
+			}
+			function openItem() {
+				$('.menu-item').each(function (index, ele) {
+					var delay = index * 0.08
+					var $bounce = $(ele).children('.menu-item-bounce')
+					var $button = $(ele).children('.menu-item-button')
+					TweenMax.fromTo($bounce, 0.2, {
+						transformOrigin: "50% 50%"
+					}, {
+						delay: delay,
+						scaleX: 0.8,
+						scaleY: 1.2,
+						force3D: true,
+						ease: Quint.easeInOut,
+						onComplete: function () {
+							TweenMax.to($bounce, 0.15, {
+								scaleY: 0.7,
+								force3D: true,
+								ease: Quint.easeInOut,
+								onComplete: function () {
+									TweenMax.to($bounce, 3, {
+										scaleY: 0.8,
+										force3D: true,
+										ease: Elastic.easeOut,
+										easeParams: [1.1, 0.12]
+									})
+								}
+							})
+						}
+					})
+					TweenMax.to($button, 0.5, {
+						delay: delay,
+						y: -distance,
+						force3D: true,
+						ease: Quint.easeInOut
+					})
+				})
+			}
+			function closeItem() {
+				$('.menu-item').each(function (index, ele) {
+					var delay = index * 0.08
+					var $bounce = $(ele).children('.menu-item-bounce')
+					var $button = $(ele).children('.menu-item-button')
+					TweenMax.fromTo($bounce, 0.2, {
+						transformOrigin: "50% 50%"
+					}, {
+						delay: delay,
+						scaleX: 1,
+						scaleY: 1.2,
+						force3D: true,
+						ease: Quint.easeInOut,
+						onComplete: function () {
+							TweenMax.to($bounce, 0.15, {
+								scaleY: 1.2,
+								force3D: true,
+								ease: Quint.easeInOut,
+								onComplete: function () {
+									TweenMax.to($bounce, 3, {
+										scaleY: 1,
+										force3D: true,
+										ease: Elastic.easeOut,
+										easeParams: [1.1, 0.12]
+									})
+								}
+							})
+						}
+					})
+					TweenMax.to($button, 0.5, {
+						delay: delay,
+						y: 0,
+						force3D: true,
+						ease: Quint.easeIn
+					})
+				})
+			}
+			function endHandler() {
+				TweenMax.to($('.menu-toggle-icon'), 0.1, {
+					scale: 1
+				})
+			}
+		})
+	</script>
+</body>
+
+</html>
