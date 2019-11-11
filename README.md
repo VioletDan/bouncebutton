@@ -2,4 +2,4 @@
 
 感谢[TweenMax 实际应用](https://www.tweenmax.com.cn/cool/)弹性按钮的示例给予的灵感,
 
-![https://github.com/VioletDan/bouncebutton/blob/master/bouncebutton.gif]()
+![bouncebutton](./bouncebutton.gif)
